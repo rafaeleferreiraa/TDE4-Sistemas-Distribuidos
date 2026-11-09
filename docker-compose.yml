@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app1:
+    build: .
+    environment:
+      - PORT=3000
+      - INSTANCE_ID=Instancia-Docker-1
+    restart: always
+
+  app2:
+    build: .
+    environment:
+      - PORT=3000
+      - INSTANCE_ID=Instancia-Docker-2
+    restart: always
+
+  app3:
+    build: .
+    environment:
+      - PORT=3000
+      - INSTANCE_ID=Instancia-Docker-3
+    restart: always
+
+  loadbalancer:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
+      - app3
+    restart: always
